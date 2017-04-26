@@ -26,7 +26,7 @@ describe('POST /todos', () => {
         request(app)
             .post('/todos')
             .send({ text })
-            .expect(200)
+            .expect(201)
             .expect((res) => expect(res.body.text).toBe(text))
             .end((error, res) => {
                 if (error) {
@@ -68,4 +68,29 @@ describe('GET /todos', () => {
             .expect((res) => expect(res.body.todos.length).toBe(todos.length))
             .end(done);
     });
+});
+
+describe('GET /todos/:id', () => {
+    
+    // it('should not get a todo by its id with invalid id', (done) => {
+    //     request(app)
+    //         .get('/todos/' + 123)
+    //         .expect(200)
+    //         .end(done);
+    // });
+    
+    // it('should not get a todo by its id with invalid id', (done) => {
+    //     request(app)
+    //         .get('/todos/' + 123)
+    //         .expect(400)
+    //         .end(done);
+    // });
+    
+    it('should not get a todo by its id with invalid id', (done) => {
+        request(app)
+            .get('/todos/' + 123)
+            .expect(404)
+            .end(done);
+    });
+    
 });
