@@ -15,8 +15,7 @@ const logsDir = "logs/"
 var app = express();
 app.use(bodyParser.json());
 
-
-var now = new Date().toString();
+/*var now = new Date().toString();
 if (!fs.existsSync(logsDir)) fs.mkdirSync(logsDir);
 fs.appendFile(`${logsDir}server.log`,  `\n----------- LOG STARTED at ${now} -----------\n\n`, (error) => { if (error) console.log('Cant write to logs') });
 
@@ -27,7 +26,7 @@ app.use((req, res, next) => {
     if (!fs.existsSync(logsDir)) fs.mkdirSync(logsDir);
     fs.appendFile(`${logsDir}server.log`, log + '\n', (error) => { if (error) console.log('Cant write to logs') });
     next();
-});
+});*/
 
 // Routes
 
@@ -49,11 +48,10 @@ app.get('/todos/:id', (req, res) => {
     }
     Todo.findById(id)
         .then((todo) => {
-            if (todo) {
-                res.send({ todo });
-            } else {
+            if (!todo) {
                 res.sendStatus(404);
             }
+            return res.send({ todo });
         })
         .catch((e) => res.sendStatus(400));
     
