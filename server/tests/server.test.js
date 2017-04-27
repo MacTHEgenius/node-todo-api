@@ -171,12 +171,12 @@ describe('PATCH PUT /todos/:id', () => {
             .expect(200)
             .expect((res) => {
                 expect(res.body.todo.completed).toBe(false);
-                // expect(res.body.todo.completedAt).toBeA('number');
+                expect(res.body.todo.completedAt).toNotExist();
             }).end((err, res) => {
                 if (err) return done(err);
                 Todo.findById(hexId).then((todo) => {
                     expect(todo.completed).toBe(false);
-                    // expect(res.body.todo.completedAt).toBeA('number');
+                    expect(res.body.todo.completedAt).toNotExist();
                     done();
                 }).catch((e) => done(e));
             });
