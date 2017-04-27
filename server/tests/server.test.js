@@ -8,7 +8,8 @@ const { Todo } = require('./../models/todo');
 const todos = [
     { _id: new ObjectID(), text: 'Beat Gimli record.' },
     { _id: new ObjectID(), text: 'Kill some orcs.' },
-    { _id: new ObjectID(), text: 'Be the greatest archer.' }
+    { _id: new ObjectID(), text: 'Be the greatest archer.' },
+    { _id: new ObjectID(), text: 'Be a badass elf.', completed: true, completedAt: 123 }
 ];
 
 beforeEach((done) => {
@@ -132,4 +133,72 @@ describe('DELETE /todos/:id', () => {
             .end(done);
     });
     
-})
+});
+
+describe('PATCH PUT /todos/:id', () => {
+    
+    it('should update todo with valid id and completed true', (done) => {
+        var newText = "Slide that stairs to shoot those hoorooks in the head.";
+        var todo = todos[1];
+        var hexId = todo._id.toHexString();
+        
+        request(app)
+            .patch(`/todos/${hexId}`)
+            .send({ text: newText, completed: true })
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todo.text).toBe(newText);
+                expect(res.body.todo.completed).toBe(true);
+                expect(res.body.todo.completedAt).toBeA('number');
+            }).end((err, res) => {
+                if (err) return done(err);
+                Todo.findById(hexId).then((todo) => {
+                    expect(todo.text).toBe(newText);
+                    expect(todo.completed).toBe(true);
+                    expect(res.body.todo.completedAt).toBeA('number');
+                    done();
+                }).catch((e) => done(e));
+            });
+    });
+    
+    it('should update todo with valid id and completed false', (done) => {
+        var todo = todos[3];
+        var hexId = todo._id.toHexString();
+        
+        request(app)
+            .patch(`/todos/${hexId}`)
+            .send({ completed: false })
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todo.completed).toBe(false);
+                // expect(res.body.todo.completedAt).toBeA('number');
+            }).end((err, res) => {
+                if (err) return done(err);
+                Todo.findById(hexId).then((todo) => {
+                    expect(todo.completed).toBe(false);
+                    // expect(res.body.todo.completedAt).toBeA('number');
+                    done();
+                }).catch((e) => done(e));
+            });
+    });
+    
+    it('should return 404 with todo not found', (done) => {
+        var hexId = new ObjectID().toHexString();
+        var newText = "Slide that stairs to shoot those hoorooks in the head.";
+        request(app)
+            .patch(`/todos/${hexId}`)
+            .send({ text: newText, completed: true })
+            .expect(404)
+            .end(done);
+    });
+    
+    it('should return 404 with invalid id', (done) => {
+        var newText = "Slide that stairs to shoot those hoorooks in the head.";
+        request(app)
+            .delete('/todos/123')
+            .send({ text: newText, completed: true })
+            .expect(404)
+            .end(done);
+    });
+    
+});
