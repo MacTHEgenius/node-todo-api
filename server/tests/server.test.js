@@ -240,6 +240,12 @@ describe('POST /users', () => {
     
 });
 
+describe('POST /users/login', () => {
+    
+    
+    
+})
+
 describe('GET /users/me', () => {
     
     it('should return user if authenticated', (done) => {
