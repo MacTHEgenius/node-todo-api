@@ -10,13 +10,13 @@ const users = [
     { 
         _id: userOneId, email: 'email@example.com', password: 'userOnePass', 
         tokens: [
-            { access: 'auth', token: jwt.sign({ _id: userOneId, access: 'auth' }, 'abc123').toString() }
+            { access: 'auth', token: jwt.sign({ _id: userOneId, access: 'auth' }, process.env.JWT_SECRET).toString() }
         ]
     },
     { 
         _id: userTwoId, email: 'email2@example.com', password: 'userTwoPass' , 
         tokens: [
-            { access: 'auth', token: jwt.sign({ _id: userTwoId, access: 'auth' }, 'abc123').toString() }
+            { access: 'auth', token: jwt.sign({ _id: userTwoId, access: 'auth' }, process.env.JWT_SECRET).toString() }
         ]
     }
 ];

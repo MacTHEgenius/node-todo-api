@@ -1,4 +1,4 @@
-require('./../config/config');
+require('./config/config');
 
 const fs = require('fs');
 
@@ -126,10 +126,8 @@ app.get('/users/me', authenticate, (req, res) => {
 
 // Listening...
 
-const port = process.env.PORT || 3000;
-const ip = process.env.IP || "0.0.0.0";
-app.listen(port, ip, () => {
-    console.log(`Started at ${ip}:${port}`);
+app.listen(process.env.PORT, process.env.IP, () => {
+    console.log(`Started at ${process.env.IP}:${process.env.PORT}`);
 });
 
 module.exports = { app };
