@@ -299,3 +299,22 @@ describe('GET /users/me', () => {
     });
     
 });
+
+describe('DELETE /users/me/token', () => {
+    
+    it('should remove auth token on log out', (done) => {
+        var user = users[0];
+        request(app)
+            .delete('/users/me/token')
+            .set('x-auth', user.tokens[0].token)
+            .expect(200)
+            .end((err, res) => {
+                if (err) return done(err);
+                User.findById(user._id).then((user) => {
+                    expect(user.tokens.length).toBe(0);
+                    done();
+                }).catch((e) => done(e));
+            });
+    });
+    
+});
