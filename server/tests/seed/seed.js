@@ -13,14 +13,19 @@ const users = [
             { access: 'auth', token: jwt.sign({ _id: userOneId, access: 'auth' }, 'abc123').toString() }
         ]
     },
-    { _id: userTwoId, email: 'email2@example.com', password: 'userTwoPass' }
+    { 
+        _id: userTwoId, email: 'email2@example.com', password: 'userTwoPass' , 
+        tokens: [
+            { access: 'auth', token: jwt.sign({ _id: userTwoId, access: 'auth' }, 'abc123').toString() }
+        ]
+    }
 ];
 
 const todos = [
-    { _id: new ObjectID(), text: 'Beat Gimli record.' },
-    { _id: new ObjectID(), text: 'Kill some orcs.' },
-    { _id: new ObjectID(), text: 'Be the greatest archer.' },
-    { _id: new ObjectID(), text: 'Be a badass elf.', completed: true, completedAt: 123 }
+    { _id: new ObjectID(), text: 'Beat Gimli record.', _creator: userOneId },
+    { _id: new ObjectID(), text: 'Kill some orcs.', _creator: userOneId },
+    { _id: new ObjectID(), text: 'Be the greatest archer.', _creator: userTwoId },
+    { _id: new ObjectID(), text: 'Be a badass elf.', completed: true, completedAt: 123, _creator: userTwoId }
 ];
 
 const populateUsers = (done) => {
